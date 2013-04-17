@@ -10,7 +10,7 @@
 @logging
 public class Parent {
 
-//	@logging
+	@logging
 	public class Daughter {
 		public String name;
 		public String talk;
@@ -24,12 +24,14 @@ public class Parent {
 		}
 	}
 
+	public Son tom;
+	public Son sam;
 	Parent(){
-		Son tom = new Son();
-		Son sam = new Son("Sam");
+		tom = new Son();
+		sam = new Son("Sam");
 		Daughter libby = new Daughter();
 		libby.name = "Libby";
-		tom.complain();
+
 		libby.complain();
 	}
 
