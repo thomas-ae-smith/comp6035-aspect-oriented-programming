@@ -14,6 +14,8 @@ public class Parent {
 	public class Daughter {
 		public String name;
 		public String talk;
+		public int age;
+		
 		public void complain(){
 			talk = "Awww";
 			System.out.println("Awww");
@@ -26,10 +28,11 @@ public class Parent {
 
 	public Son tom;
 	public Son sam;
+	public Daughter libby;
 	Parent(){
 		tom = new Son();
-		sam = new Son("Sam");
-		Daughter libby = new Daughter();
+		sam = new Son("Sam", 20);
+		libby = new Daughter();
 		libby.name = "Libby";
 
 		libby.complain();

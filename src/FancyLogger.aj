@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.aspectj.lang.JoinPoint.StaticPart;
+import java.lang.reflect.Modifier;
 
-import com.sun.org.apache.regexp.internal.recompile;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 /**
  * @author taes1g09
@@ -34,6 +34,10 @@ public aspect FancyLogger {
 	
 	HashMap<String, BufferedWriter> writerCache = new HashMap<String, BufferedWriter>();
 	HashMap<Object, Integer> objectIDs = new HashMap<Object, Integer>();
+	
+	boolean isPrimitiveWrapper(Object obj) {
+		return WRAPPERS.contains(obj.getClass());
+	}
 	
 	private static HashSet<Class<?>> getWrappers() {
 		HashSet<Class<?>> wrappers = new HashSet<Class<?>>();
@@ -77,20 +81,6 @@ public aspect FancyLogger {
 		return writer;
 	}
 	
-	void writeLog(String className, String logMessage) {
-		try {
-			getFile(className).write(logMessage + "\n");
-		} catch (IOException e) {
-			System.err.println("Error writing to " + className + " logfile.");
-			e.printStackTrace();
-		}
-		return;
-	}
-	
-	boolean isPrimitiveWrapper(Object obj) {
-		return WRAPPERS.contains(obj.getClass());
-	}
-	
 	String parseArg(Object obj) {
 		Integer arg;
 		if ((arg = objectIDs.get(obj)) != null) return "#" + arg;
@@ -102,48 +92,48 @@ public aspect FancyLogger {
 	
 	String parseConstructorArgs(Object[] objs) {
 		System.out.println("Parsing constructor args" + objs.length);
-		if (objs.length == 0) return "";
-		StringBuilder args = new StringBuilder();
+		if (objs.length == 0) return "n,";
+		StringBuilder args = new StringBuilder("n, ");
 		for (Object obj : objs) {
 			args.append(parseArg(obj) + " ");
 		}
 		return args.toString();
 	}
 	
+	void writeLog(int ID, StaticPart jpsp, String modification) {
+		String className = jpsp.getSignature().getDeclaringTypeName();
+		String updateTime = "" + new Date().getTime();
+		String sourceLocation = jpsp.getSourceLocation().toString();
+		try {
+			getFile(className).write("#" + ID + ", " + updateTime + ", " + sourceLocation + ", " + modification + "\n");
+		} catch (IOException e) {
+			System.err.println("Error writing to " + className + " logfile.");
+			e.printStackTrace();
+		}
+		return;
+	}
+	
 	//preserve (law &) order by recording correct data prior to construction
 	Object around(): loggedConstructor(){
-		String className = thisJoinPointStaticPart.getSignature().getDeclaringTypeName();
-		String creationTime = "" + new Date().getTime();
-		String sourceLocation = thisJoinPointStaticPart.getSourceLocation().toString();
 		Integer ID = IDpool.incrementAndGet();
 		Object obj = proceed();
 		objectIDs.put(obj, ID);
-		writeLog(className, "#" + ID + ", " + creationTime + ", " + sourceLocation + ", n, " +  parseConstructorArgs(thisJoinPoint.getArgs()));
+		writeLog(ID, thisJoinPointStaticPart, parseConstructorArgs(thisJoinPoint.getArgs()));
 		return obj;
 	}
 	
 	before(): loggedPrivate(){
-		String className = thisJoinPointStaticPart.getSignature().getDeclaringTypeName();
-		System.out.println("Private className " + className);
-		String updateTime = "" + new Date().getTime();
-		String sourceLocation = thisJoinPointStaticPart.getSourceLocation().toString();
 		Object obj = thisJoinPoint.getTarget();
 		Integer ID = objectIDs.get(obj);
-		String field = thisJoinPoint.getSignature().getName();
-		System.out.println("Field: " + field);
-		writeLog(className, "#" + ID + ", " + updateTime + ", " + sourceLocation + ", p(" + field + "), " +  parseArg(thisJoinPoint.getArgs()[0]));
+		String modification = "p(" + thisJoinPoint.getSignature().getName() + "), " +  parseArg(thisJoinPoint.getArgs()[0]);
+		writeLog(ID, thisJoinPointStaticPart, modification);
 	}
 	
 	before(): loggedPublic(){
-		String className = thisJoinPointStaticPart.getSignature().getDeclaringTypeName();
-		System.out.println("Public className " + className);
-		String updateTime = "" + new Date().getTime();
-		String sourceLocation = thisJoinPointStaticPart.getSourceLocation().toString();
 		Object obj = thisJoinPoint.getTarget();
 		Integer ID = objectIDs.get(obj);
-		String field = thisJoinPoint.getSignature().getName();
-		System.out.println("Field: " + field);
-		writeLog(className, "#" + ID + ", " + updateTime + ", " + sourceLocation + ", u(" + field + "), " +  parseArg(thisJoinPoint.getArgs()[0]));
+		String modification = "u(" + thisJoinPoint.getSignature().getName() + "), " +  parseArg(thisJoinPoint.getArgs()[0]);
+		writeLog(ID, thisJoinPointStaticPart, modification);
 	}
 	
 	after(): execution(public static * main(..)) {
@@ -169,6 +159,7 @@ public aspect FancyLogger {
 		dad.tom.complain();
 		dad.tom.brother = dad.sam;
 		dad.sam.brother = dad.tom;
+		dad.libby.age = 18;
 		return;
 	}
 }
