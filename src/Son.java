@@ -1,7 +1,8 @@
 	@logging
 	public class Son {
 		public String name;
-		public String talk;
+		private String talk;
+		public Son brother;
 		
 		public void complain(){
 			talk = "not fair";
