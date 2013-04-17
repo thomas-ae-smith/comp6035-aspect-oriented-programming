@@ -1,8 +1,4 @@
 /**
- * 
- */
-
-/**
  * @author taes1g09
  *
  */
@@ -31,7 +27,10 @@ public class Parent {
 	public Daughter libby;
 	Parent(){
 		tom = new Son();
+		int i = 0;
+		while (i < 1000000000) {i++;}
 		sam = new Son("Sam", 20);
+		while (i > 0) {i--;}
 		libby = new Daughter();
 		libby.name = "Libby";
 

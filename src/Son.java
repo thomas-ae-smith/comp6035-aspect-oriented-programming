@@ -1,3 +1,8 @@
+/**
+ * @author taes1g09
+ *
+ */
+	
 	@logging
 	public class Son {
 		public String name;
