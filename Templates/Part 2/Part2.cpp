@@ -14,11 +14,13 @@ int main (int argc, const char * argv[])
 {
     
     //  x+(x-2)*(x-3)
-    typedef ADD< X<BOUNDS<1, 2>>, MUL< SUB< X, LIT<2> >, SUB< X, LIT<3> > > > EXP;
+    typedef ADD< X< BOUNDS<0, 10> >, MUL< SUB< X< BOUNDS<0, 10> >, LIT<2> >, SUB< X<BOUNDS<0, 10>>, LIT<3> > > > EXP;
     EXP x;
     
     int low = 3;
     int high = 10;
+    
+    printf("With range 0-10, lower bound is %d\n", x::LOWER );
     
     printf("Input %d, output %d\n", low, x.eval(low) );
     printf("Input %d, output %d\n", high, x.eval(high) );
