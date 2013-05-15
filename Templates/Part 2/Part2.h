@@ -10,14 +10,25 @@
 #define Templates_Part2_h
 
 template <int LOW, int UPP>
-struct BOUNDS {
-    enum { LOWER = LOW, UPPER = UPP };
+class BOUNDS {
+    enum {
+        LOWER = LOW,
+        UPPER = UPP
+    };
 };
 
-template<BOUNDS<1, 2> B>
+template< template <int,int> class BOUNDS >
 struct X
 {
+//    enum {
+//        LOWER = BOUNDS::LOWER,
+//        UPPER = BOUNDS::UPPER
+//    };
+
 	static inline int eval(int x) {
+//        if ( (x < BOUNDS::LOWER ) || (x > BOUNDS::UPPER) ) {    //TODO: separate
+//            throw "Value for x lies outside bounds";
+//        }
         return x;
 	};
 };
@@ -25,6 +36,11 @@ struct X
 template<int X>
 struct LIT
 {
+    enum {
+        LOWER = X,
+        UPPER = X
+    };
+    
 	static inline int eval(int x) {
 		return (int)X;
 	};
@@ -33,6 +49,11 @@ struct LIT
 template<class L, class R>
 struct ADD
 {
+    enum {
+        LOWER = L::LOWER + R::LOWER,
+        UPPER = L::UPPER + R::UPPER
+    };
+    
 	static inline int eval(int x) {
 		return L::eval(x) + R::eval(x);
 	};
@@ -41,6 +62,11 @@ struct ADD
 template<class L, class R>
 struct SUB
 {
+    enum {
+        LOWER = L::LOWER - R::UPPER,
+        UPPER = L::UPPER - R::LOWER
+    };
+
 	static inline int eval(int x) {
 		return L::eval(x) - R::eval(x);
 	};
@@ -49,6 +75,11 @@ struct SUB
 template<class L, class R>
 struct MUL
 {
+    enum {
+        LOWER = L::LOWER * R::LOWER,
+        UPPER = L::UPPER * R::UPPER
+    };
+
 	static inline int eval(int x) {
 		return L::eval(x) * R::eval(x);
 	};
@@ -57,63 +88,15 @@ struct MUL
 template<class L, class R>
 struct DIV
 {
+    enum {
+        LOWER = L::LOWER / R::UPPER,
+        UPPER = L::UPPER / R::LOWER
+    };
+
 	static inline int eval(int x) {
 		return L::eval(x) / R::eval(x);
 	};
 };
-
-
-template <class A>
-struct POS
-{
-    enum { RET = true };
-};
-
-template <>
-struct POS< P >
-{
-    enum { RET = true};
-};
-
-template <bool V>
-struct POS< LIT<V> >
-{
-    enum { RET = true};
-};
-
-
-template <class A>
-struct POS< NOT<A> >
-{
-    enum {RET = ! POS<A>::RET };
-};
-
-
-template <class A, class B>
-struct POS< AND<A,B> > {
-    enum {RET = POS<A>::RET && POS<B>::RET};
-};
-
-
-template <class A, class B>
-struct POS< OR<A,B> > {
-    enum {RET = POS<A>::RET && POS<B>::RET};
-};
-
-template <class A, class B>
-struct POS< IMP<A,B> > {
-    enum {RET = !POS<A>::RET && POS<B>::RET};
-};
-
-
-
-
-
-
-
-
-
-
 
 
 
