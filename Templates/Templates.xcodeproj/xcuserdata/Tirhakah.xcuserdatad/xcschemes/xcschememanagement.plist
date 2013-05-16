@@ -12,7 +12,17 @@
 		<key>Part 2.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+		<key>Part 3.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
 			<integer>2</integer>
+		</dict>
+		<key>Part 4.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -28,6 +38,16 @@
 			<true/>
 		</dict>
 		<key>F9AD1A191743D00E00206302</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F9AD1A2C1744D68300206302</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F9AD1A3A1744E0C200206302</key>
 		<dict>
 			<key>primary</key>
 			<true/>

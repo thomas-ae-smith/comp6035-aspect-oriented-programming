@@ -19,11 +19,20 @@ int main (int argc, const char * argv[])
     
     int low = 3;
     int high = 10;
+    int toohigh = 100;
     
-    printf("With range 0-10, lower bound is %d\n", x::LOWER );
+    printf("Welcome to Part 4\n.");
+    
+    printf("With range 0-10, lower bound is %d and upper bound is %d\n", x.LOWER, x.UPPER );
     
     printf("Input %d, output %d\n", low, x.eval(low) );
     printf("Input %d, output %d\n", high, x.eval(high) );
+    try {
+        printf("Input %d, output %d\n", toohigh, x.eval(toohigh) );
+    } catch (bool e) {
+        printf("%s\n", e? "Value for x is too small" : "Value for x is too large");
+    }
+
     
     
     return 0;

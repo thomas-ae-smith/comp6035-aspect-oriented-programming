@@ -20,6 +20,8 @@ int main (int argc, const char * argv[])
     int low = 3;
     int high = 10;
     
+    printf("Welcome to Part 4\n.");
+    
     printf("Input %d, output %d\n", low, x.eval(low) );
     printf("Input %d, output %d\n", high, x.eval(high) );
     
