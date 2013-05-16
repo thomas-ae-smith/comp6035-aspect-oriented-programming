@@ -9,6 +9,18 @@
 #ifndef Templates_Part3_h
 #define Templates_Part3_h
 
+//included from provided Mins.cpp
+template <int I, int J>
+struct MIN {
+    enum {RET = I<J? I : J };
+};
+
+//inferred
+template <int I, int J>
+struct MAX {
+    enum {RET = I>J? I : J };
+};
+
 static int vIndex = 0;
 static void resetVIndex() {
     vIndex = 0;
@@ -81,12 +93,28 @@ struct SUB
 	};
 };
 
-template<class L, class R>
+template<class L, class R>      //this assumes that different instances of x can take different values
 struct MUL
 {
     enum {
-        LOWER = L::LOWER * R::LOWER,
-        UPPER = L::UPPER * R::UPPER
+        LOWER = MIN<
+        MIN<
+        L::LOWER * R::LOWER,                //both entirely positive
+        L::UPPER * R::UPPER>::RET           //both entirely negative
+        ,
+        MIN<
+        L::LOWER * R::UPPER,                //L at least partly negative
+        L::UPPER * R::LOWER>::RET           //R at least partly negative
+        >::RET,
+        UPPER = MAX<
+        MAX<
+        L::UPPER * R::UPPER,                //both entirely positive
+        L::LOWER * R::LOWER>::RET           //both entirely negative
+        ,
+        MAX<
+        L::LOWER * R::UPPER,                //R entirely negative
+        L::UPPER * R::LOWER>::RET           //L entirely negative
+        >::RET
     };
     
 	static inline int eval(int x[]) {
@@ -94,7 +122,7 @@ struct MUL
 	};
 };
 
-template<class L, class R>
+template<class L, class R>  //see part 2
 struct DIV
 {
     enum {

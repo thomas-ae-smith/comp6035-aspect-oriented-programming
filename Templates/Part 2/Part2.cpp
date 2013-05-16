@@ -21,7 +21,7 @@ int main (int argc, const char * argv[])
     int high = 10;
     int toohigh = 100;
     
-    printf("Welcome to Part 4\n.");
+    printf("Welcome to Part 2\n");
     
     printf("With range 0-10, lower bound is %d and upper bound is %d\n", x.LOWER, x.UPPER );
     
