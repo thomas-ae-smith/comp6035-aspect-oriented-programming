@@ -23,9 +23,9 @@ int main (int argc, const char * argv[])
     
     int outputs[3];
     
-    printf("Welcome to Part 4\n.");
+    printf("Welcome to Part 3\n");
     
-    printf("With range 0-10, lower bound is %d and upper bound is %d\n", x.LOWER, x.UPPER );
+    printf("With range 0-10 over 3 variables, lower bound is %d and upper bound is %d\n", x.LOWER, x.UPPER );
     
     printf("Input {%d, %d, %d}, output %d\n", low[0], low[1], low[2], outputs[0] = x.eval(low) );
     resetVIndex();

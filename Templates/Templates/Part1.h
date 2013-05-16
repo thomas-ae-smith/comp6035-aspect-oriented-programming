@@ -9,6 +9,7 @@
 #ifndef Templates_Part1_h
 #define Templates_Part1_h
 
+//terminal
 struct X
 {
 	static inline int eval(int x) {
@@ -16,6 +17,7 @@ struct X
 	};
 };
 
+//literal
 template<int X>
 struct LIT
 {
@@ -24,6 +26,7 @@ struct LIT
 	};
 };
 
+//addition (preferred notation of L-value and R-value, semantically clearer than A & B)
 template<class L, class R>
 struct ADD
 {
@@ -32,6 +35,7 @@ struct ADD
 	};
 };
 
+//subtraction
 template<class L, class R>
 struct SUB
 {
@@ -40,6 +44,7 @@ struct SUB
 	};
 };
 
+//multiplication
 template<class L, class R>
 struct MUL
 {
@@ -48,6 +53,7 @@ struct MUL
 	};
 };
 
+//division
 template<class L, class R>
 struct DIV
 {
